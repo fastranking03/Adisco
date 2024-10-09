@@ -1,0 +1,26 @@
+<header class="bg-black px-20">
+    <div class="flex justify-between items-center h-[80px]">
+       <div>
+           <h2 class="text-[35px] font-[700] text-red-400"><a href="">Adis<span class="text-white">Co</span></a></h2>
+       </div>
+       <div>
+           <ul class="flex gap-10">
+               <li class="text-white"><a href="/">Home</a></li>
+               <li class="text-white"><a href="">About</a></li>
+               <li class="text-white"><a href="/services">Services</a></li>
+           </ul>
+       </div>
+       <div>
+           <ul>
+               <li class="text-white">
+                 <% if (user) { %> <!-- Corrected the syntax -->
+                   <a href="/logout" class="text-white border-[1px] border-red-500 p-2 px-4 rounded-[10px] mb-0">Logout</a>
+                 <% } else { %>
+                   <a href="/login" class="text-white border-[1px] border-red-500 p-2 px-4 rounded-[10px] mb-0">Login</a>
+                 <% } %> <!-- Ensure consistent EJS tag usage -->
+               </li>
+             </ul>
+             
+       </div>
+    </div>
+</header>
