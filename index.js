@@ -4,6 +4,12 @@ import path from "path";
 import session from "express-session";
 import userRoute from "./routes/userRoute.js"
 import serviceRoute from "./routes/serviceRoute.js"
+import commanRoute from "./routes/admin/commanRoute.js"
+import categoryRoute from "./routes/admin/categoryRoute.js"
+import subCategoryRoute from "./routes/admin/subCategoryRoute.js"
+import professionalRoute from "./routes/admin/professionalRoute.js"
+import slotRoute from "./routes/admin/slotRoute.js"
+
 const app = express()
 dotenv.config()
 
@@ -31,6 +37,13 @@ app.use(express.urlencoded({extended:true}))
 // All Routes
 app.use('/', userRoute)
 app.use('/',serviceRoute)
+
+// Admin Route
+app.use('/admin/',commanRoute)
+app.use('/admin/',categoryRoute)
+app.use('/admin/',subCategoryRoute)
+app.use('/admin/',professionalRoute)
+app.use('/admin/',slotRoute)
 
 app.use('/',(req,res) =>{
     res.render('index')

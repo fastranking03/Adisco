@@ -1,25 +1,194 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adisco | Home</title>
     <%- include('includes/head') %>
 </head>
+
 <body>
     <div>
         <%- include('includes/header') %>
-        <div class="main">
-            <section>
-                <div>
-                    <div>
-                         <img src="https://res.cloudinary.com/dvzfuapyy/image/upload/v1728465438/w2hjwu2ka1v6fteksgox.jpg" class="w-[100%] h-[400px] object" style="object-position: inherit;object-fit: cover;" alt="">
-                    </div>
-                </div>
-            </section>
-            
-  
+            <div class="main">
+                <section class="mt-20">
+                    <div class="w-[1200px] mx-auto shadow p-4 rounded-[10px]"
+                        style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+                        <div class="mb-8">
+                            <h2 class="text-3xl font-[600]">Select Services</h2>
+                        </div>
+                        <div class="flex mt-5 gap-10">
+                            <div class="w-[60%]">
+                                <div class="">
+                                    <ul class="flex gap-3 overflow overflow-x-auto">
+                                        <% catData.forEach((data, index)=> { %>
+                                            <li class="<%= index === 0 ? 'bg-orange-500' : 'bg-black' %> text-white cat-li rounded-[10px] p-2 px-3 font-[600] cursor-pointer whitespace-nowrap"
+                                                onclick="showSubCategories('<%= data.id %>','<%= index %>')"
+                                                id="tab-<%= index %>">
+                                                <%= data.cat_name %>
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                    <div class="mt-7">
+                                        <% catData.forEach((category, index)=> { %>
+                                            <div class="sub-category-content" id="content-<%= category.id %>"
+                                                style="display: <%= index === 0 ? 'block' : 'none' %>;">
+                                                <h2 class="font-[600] text-[22px]">
+                                                    <%= category.cat_name %> Services
+                                                </h2>
 
-        </div>
+                                                <div class="mt-5">
+                                                    <% subCatData.filter(subCat=> subCat.cat_id === category.id).forEach((subCat) => { %>
+                                                        <div id="service-box-<%= subCat.id %>"
+                                                            class="flex justify-between items-center shadow p-5 cursor-pointer rounded-[10px] mb-2"
+                                                            style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;"
+                                                            onclick="toggleService('<%= subCat.id %>','<%= subCat.cat_id %>', '<%= subCat.service_name %>', '<%= subCat.duration %>', '<%= subCat.price %>')">
+                                                            <div>
+                                                                <h2 class="text-[18px] font-[700]">
+                                                                    <%= subCat.service_name %>
+                                                                </h2>
+                                                                <span class="text-[13px] font-[600] text-gray-500">
+                                                                    <%= subCat.duration %>
+                                                                </span>
+                                                                <p class="mt-3 text-[17px] font-[500]">£<%= subCat.price
+                                                                        %>
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <span class="icon">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24">
+                                                                        <path fill="#a59c9c"
+                                                                            d="M12 20a8 8 0 0 1-8-8a8 8 0 0 1 8-8a8 8 0 0 1 8 8a8 8 0 0 1-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2" />
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <% }) %>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-[40%]">
+                                <div class="shadow bg-white border-[1px] rounded-[10px] relative h-[600px]">
+                                    <div class="flex gap-5 p-3">
+                                        <div><img
+                                                src="https://res.cloudinary.com/dvzfuapyy/image/upload/v1728465918/pic1_wg78nc.jpg"
+                                                class="w-[70px] h-[70px] rounded-[20px]" alt=""></div>
+                                        <div>
+                                            <h2 class="text-[20px] font-[700]">Service Name</h2>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4" id="selected-services">
+
+                                    </div>
+                                    <div>
+                                        <ul class="flex justify-between p-4">
+                                            <li class="font-[600] text-[18px]">Total</li>
+                                            <li class="font-[600] text-[20px]" id="total-amount">£0</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-3 absolute w-[100%] bottom-2">
+                                        <button class="bg-orange-400 p-3 w-[100%] rounded-[10px] font-[600] text-white"
+                                            onclick="continueToStaff()">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
     </div>
+    <script>
+        let selectedServices = [];
+        let totalAmount = 0;
+
+        function showSubCategories(categoryId, tabIndex) {
+            document.querySelectorAll('.sub-category-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`content-${categoryId}`).style.display = 'block';
+ 
+            document.querySelectorAll('.cat-li').forEach(tab => {
+                tab.classList.remove('bg-orange-500', 'text-white');
+                tab.classList.add('bg-black', 'text-white');
+            });
+
+            const activeTab = document.getElementById(`tab-${tabIndex}`);
+            activeTab.classList.remove('bg-black', 'text-white');
+            activeTab.classList.add('bg-orange-500', 'text-white');
+        }
+
+
+        function toggleService(serviceId, cat_id, serviceName, duration, price) {
+            const serviceIndex = selectedServices.findIndex(service => service.id === serviceId);
+            const serviceBox = document.getElementById(`service-box-${serviceId}`);
+ 
+            if (serviceIndex === -1) {
+                
+                // Service is not selected, so we select it
+                selectedServices.push({ id: serviceId, cat_id, name: serviceName, duration, price });
+                totalAmount += parseInt(price);
+
+                // Update the box styling to show it's selected
+                serviceBox.classList.add('border-success', 'selected');
+                serviceBox.querySelector('.icon').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="#107f63" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"/></svg>
+               `;
+            } else {
+                // Service is already selected, so we deselect it
+                selectedServices.splice(serviceIndex, 1);
+                totalAmount -= parseInt(price);
+
+                // Revert box styling to show it's deselected
+                serviceBox.classList.remove('border-success', 'selected');
+                serviceBox.querySelector('.icon').innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="#a59c9c" d="M12 20a8 8 0 0 1-8-8a8 8 0 0 1 8-8a8 8 0 0 1 8 8a8 8 0 0 1-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2"/>
+              </svg>`;
+            }
+
+            // Update the right section with selected services and total
+            updateSelectedServicesUI();
+        }
+
+        function updateSelectedServicesUI() {
+            const selectedServicesContainer = document.getElementById('selected-services');
+
+            const totalElement = document.getElementById('total-amount');
+
+            // Clear existing selected services
+            selectedServicesContainer.innerHTML = '';
+
+            selectedServices.forEach(service => {
+                selectedServicesContainer.innerHTML += `
+              <div class="mb-3 border-b-1 border-b-[1px] pb-2">
+                <div class="p-2 flex justify-between">
+                  <div>
+                    <p class="font-[400] text-[15px]">${service.name}</p>
+                    <span class="text-[13px] text-gray-400">${service.duration}</span>
+                  </div>
+                  <h2 class="font-[600] text-[18px]">£${service.price}</h2>
+                </div>
+              </div>
+            `;
+            });
+
+            // Update total amount
+            totalElement.innerText = `£${totalAmount.toFixed(2)}`;
+        }
+    
+        function continueToStaff() {
+
+            // Store the selected services in localStorage
+            localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
+
+            window.location.href = "/staff";
+        }
+    </script>
+
 </body>
+
 </html>

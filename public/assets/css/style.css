@@ -9,3 +9,23 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+#weekContainer {
+    width: 100%; 
+    overflow: hidden;
+    position: relative;
+}
+
+#carouselInner {
+    display: flex;
+    transition: transform 0.5s all;
+    width: 300%;
+}
+
+.week {
+    min-width: 33.33%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+ 

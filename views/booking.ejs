@@ -1,0 +1,166 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adisco | Booking</title>
+    <%- include('includes/head') %>
+</head>
+
+<body>
+    <div>
+        <%- include('includes/header') %>
+            <div class="main">
+                <section class="mt-20">
+                    <div class="pl-10">
+                        <button onclick="history.back()">Go Back</button>
+                    </div>
+                    <div class="w-[1200px] mx-auto p-4 rounded-[10px]"
+                        style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+                        <div class="mb-8 mt-5">
+                            <h2 class="text-3xl font-[600]">Select Time</h2>
+                        </div>
+                        <div class="flex mt-5 gap-10">
+                            <div class="w-[60%]">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <button
+                                            class="flex gap-1 items-center justify-space-around border-[1px] px-5 p-1 rounded-[5px]">
+                                            <span
+                                                class="bg-orange-300 rounded-[50%] w-[30px] h-[30px] flex items-center justify-center "><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="#e5e2d6"
+                                                        d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8 8 0 0 1 7-7.938M12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6s6 2.685 6 6s-2.685 6-6 6" />
+                                                </svg></span>
+                                            <span id="staff_name" class="font-[600]"></span>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <input type="date" id="datePicker" class="p-1 border-[1px] rounded-[5px]">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-8">
+                                    <div class="flex justify-between">
+                                        <h3 class="font-[700] text-[18px]" id="currentMonth">October 2024</h3>
+                                        <div class="flex gap-3">
+                                            <button  id="prevWeek"
+                                                class="flex justify-center items-center w-[30px] h-[30px] rounded-[50%] border-[1px] hover:border-orange-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="#a09d8d"
+                                                        d="M16.25 16a1 1 0 0 1-.707-.293l-3-3a1 1 0 0 1 0-1.414l3-3a1 1 0 0 1 1.414 1.414L14.664 12l2.293 2.293A1 1 0 0 1 16.25 16m-5.5 0a1 1 0 0 1-.707-.293l-3-3a1 1 0 0 1 0-1.414l3-3a1 1 0 0 1 1.414 1.414L9.164 12l2.293 2.293A1 1 0 0 1 10.75 16" />
+                                                </svg>
+                                            </button>
+                                            <button  id="nextWeek"
+                                                class="flex justify-center items-center w-[30px] h-[30px] rounded-[50%] border-[1px] hover:border-orange-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="#a09d8d"
+                                                        d="M7.75 16a1 1 0 0 1-.707-1.707L9.336 12L7.043 9.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 7.75 16m5.5 0a1 1 0 0 1-.707-1.707L14.836 12l-2.293-2.293a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 0 1-.707.293" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-5">
+                                        <div id="weekDays" class="flex justify-between">
+                                          </div>
+                                    </div>
+
+                                    <div class="mt-10">
+                                        <div>
+                                            <h6 class="text-gray-400">Avaible Slot</h6>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2 mt-4" id="slotGrid">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-[40%]">
+                                <div class="shadow bg-white border-[1px] rounded-[10px] relative h-[600px]">
+                                    <div class="flex gap-5 p-3">
+                                        <div><img
+                                                src="https://res.cloudinary.com/dvzfuapyy/image/upload/v1728465918/pic1_wg78nc.jpg"
+                                                class="w-[70px] h-[70px] rounded-[20px]" alt=""></div>
+                                        <div>
+                                            <h2 class="text-[20px] font-[700]">Service Name</h2>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4" id="selected-services">
+
+                                    </div>
+                                    <div>
+                                        <ul class="flex justify-between p-4">
+                                            <li class="font-[600] text-[18px]">Total</li>
+                                            <li class="font-[600] text-[20px]" id="total-amount"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-3 absolute w-[100%] bottom-2">
+                                        <button
+                                            class="bg-gray-200 p-3 w-[100%] rounded-[10px] font-[600] text-white">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+    </div>
+    <script src="assets/js/calender.js"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/get-slots')
+                .then(response => response.json())
+                .then(data => {
+                    slotdata = data.slots
+                    renderSlots(slotdata)
+                })
+                .catch(error => console.error('Error fetching engines:', error));
+
+            function renderSlots(slots) {
+                console.log(slots)
+                var slotGrid = document.getElementById("slotGrid");
+                slotGrid.innerHTML = ''
+                slots.forEach(st => {
+                    const slotCart =
+                        `
+                 <button class="bg-gray-100 border-[1px] p-3 rounded-[10px] font-[600] text-[18px] hover:bg-orange-400">
+                       ${st.slot}                  
+                 </button>
+                `
+                    slotGrid.innerHTML += slotCart
+                })
+            }
+
+            const selectedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
+            const selectedServicesContainer = document.getElementById('selected-services');
+            const totalAmount = document.getElementById("total-amount")
+            const getStaff = document.getElementById("staff_name")
+            let totalPrice = 0;
+            selectedServices.forEach(service => {
+                totalPrice += parseFloat(service.price);
+                getStaff.textContent = service.staff.name
+                selectedServicesContainer.innerHTML +=
+                    `
+                <div class="mb-3 border-b-1 border-b-[1px] pb-2">
+                    <div class="p-2 flex justify-between ">
+                    <div>
+                        <p class="font-[400] text-[15px]">${service.name}</p>
+                         <span class="text-[13px] text-gray-400 flex gap-2 items-center">${service.duration} <p class="getStaff font-[600] text-black text-[15px]">${service.staff.name}</p></span>
+                        </div>
+                        <h2 class="font-[600] text-[18px"> £${service.price}</h2>
+                    </div>
+                </div>
+                `
+            });
+            totalAmount.textContent = `£${totalPrice.toFixed(2)}`;
+
+        });
+    </script>
+</body>
+
+</html>
