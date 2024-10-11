@@ -91,8 +91,8 @@
                                         </ul>
                                     </div>
                                     <div class="p-3 absolute w-[100%] bottom-2">
-                                        <button class="bg-orange-400 p-3 w-[100%] rounded-[10px] font-[600] text-white"
-                                            onclick="continueToStaff()">Continue</button>
+                                        <button class="bg-gray-300 cursor-not-allowed p-3 w-[100%] rounded-[10px] font-[600] text-white"
+                                            onclick="continueToStaff()" id="continueStaff">Continue</button>
                                     </div>
                                 </div>
                             </div>
@@ -125,24 +125,23 @@
         function toggleService(serviceId, cat_id, serviceName, duration, price) {
             const serviceIndex = selectedServices.findIndex(service => service.id === serviceId);
             const serviceBox = document.getElementById(`service-box-${serviceId}`);
- 
+            var continueStaff = document.getElementById("continueStaff")
+            
             if (serviceIndex === -1) {
                 
-                // Service is not selected, so we select it
                 selectedServices.push({ id: serviceId, cat_id, name: serviceName, duration, price });
                 totalAmount += parseInt(price);
-
+                continueStaff.classList.add('bg-orange-400','cursor-pointer')
                 // Update the box styling to show it's selected
                 serviceBox.classList.add('border-success', 'selected');
                 serviceBox.querySelector('.icon').innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="#107f63" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"/></svg>
                `;
             } else {
-                // Service is already selected, so we deselect it
+             
                 selectedServices.splice(serviceIndex, 1);
                 totalAmount -= parseInt(price);
-
-                // Revert box styling to show it's deselected
+                 // Revert box styling to show it's deselected
                 serviceBox.classList.remove('border-success', 'selected');
                 serviceBox.querySelector('.icon').innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -184,8 +183,7 @@
 
             // Store the selected services in localStorage
             localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
-
-            window.location.href = "/staff";
+             window.location.href = "/staff";
         }
     </script>
 

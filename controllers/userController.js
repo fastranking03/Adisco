@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import { fileURLToPath } from 'url';
 import { connect } from "../connection/conn.js";
+import { bookService } from "./serviceController.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -102,7 +103,7 @@ export const verifyOtpAndRegister = async (req, res) => {
     const { email, otp } = req.body;
  
     try {
-        const { otp: savedOtp, otpExpiry, name,phone, password ,email } = req.session.otpInfo;
+        const { otp: savedOtp, otpExpiry, name, phone, password ,email } = req.session.otpInfo;
 
         const userOtp = String(otp).trim();
         if (String(savedOtp) !== userOtp) {
@@ -118,8 +119,8 @@ export const verifyOtpAndRegister = async (req, res) => {
         const passHash = await bcrypt.hash(password, saltRounds);
 
         const [result] = await connect.execute(
-            "INSERT INTO users (name, email, phone,password, status, created_at) VALUES (?, ?, ?, ?, 0, NOW())",
-            [name, email, passHash]
+            "INSERT INTO users (name, email, phone, password, status, created_at) VALUES (?, ?, ?, ?, 0, NOW())",
+            [name, email, phone, passHash]
         );
         const userId = result.insertId;
 
@@ -135,10 +136,15 @@ export const verifyOtpAndRegister = async (req, res) => {
             token: token,
         };
         
-        console.log(req.session.user)
+        if (req.session.bookingData) {
+            await bookService(req, res);
+            return;
+        }
 
         delete req.session.otpInfo;
-        res.redirect('/');
+        const redirectTo = req.session.returnTo || '/'; 
+        delete req.session.returnTo;
+        res.redirect(redirectTo);
 
     } catch (e) {
         console.log(e);
@@ -161,16 +167,20 @@ export const userLogin = async (req,res) =>{
          }
          
          const token = await JWT.sign({email:user.email}, process.env.TOKEN_KEY,{ expiresIn: "1h" })
-   
+
          req.session.user={
            id:user.id,
            name:user.name,
            email:user.email,
            token:token
          }
-
-         const redirectTo = req.session.redirectTo || '/';
-         delete req.session.redirectTo; 
+        
+         if (req.session.bookingData) {
+            await bookService(req, res);
+            return;
+        }
+         const redirectTo = req.session.returnTo || '/'; 
+         delete req.session.returnTo;
          res.redirect(redirectTo);
 
     }catch(e){
