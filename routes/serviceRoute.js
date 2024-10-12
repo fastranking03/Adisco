@@ -1,5 +1,5 @@
 import express from "express";
-import { disCheckout, getCategory, getStaff,slotApi ,bookService } from "../controllers/serviceController.js";
+import {getCategory, getStaff,slotApi,disCheckout,addAddress,bookService } from "../controllers/serviceController.js";
 import { isAuthenticated } from "../middleware/authMiddleware.js";
 const router = express.Router()
 
@@ -13,5 +13,9 @@ router.get('/booking',(req,res) =>{
 
 router.get('/api/get-slots', slotApi)
 router.post('/api/book-service',bookService)
-router.get('/checkout', disCheckout ,isAuthenticated)
+router.get('/checkout' ,isAuthenticated ,disCheckout)
+router.post('/checkout',addAddress)
+router.get('/thank-you',(req,res) =>{
+    res.render('thank-you')
+})
 export default router

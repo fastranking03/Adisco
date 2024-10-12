@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import { fileURLToPath } from 'url';
 import { connect } from "../connection/conn.js";
-import { bookService } from "./serviceController.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -136,11 +135,7 @@ export const verifyOtpAndRegister = async (req, res) => {
             token: token,
         };
         
-        if (req.session.bookingData) {
-            await bookService(req, res);
-            return;
-        }
-
+ 
         delete req.session.otpInfo;
         const redirectTo = req.session.returnTo || '/'; 
         delete req.session.returnTo;
@@ -175,10 +170,6 @@ export const userLogin = async (req,res) =>{
            token:token
          }
         
-         if (req.session.bookingData) {
-            await bookService(req, res);
-            return;
-        }
          const redirectTo = req.session.returnTo || '/'; 
          delete req.session.returnTo;
          res.redirect(redirectTo);

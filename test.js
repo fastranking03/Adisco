@@ -26,13 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const slotButtons = document.querySelectorAll('#slotGrid button');
         slotButtons.forEach(button => {
             button.addEventListener('click', function () {
-                slotButtons.forEach(btn => btn.classList.remove('border-orange-500'));
-                // Add active class to selected slot button
-                this.classList.add('border-orange-500');
-                selectedSlot = this.getAttribute('data-slot');
-                console.log('Selected Slot:', selectedSlot);
                 continueBtn.classList.remove('bg-orange-400')
                 continueBtn.classList.add('bg-orange-400')
+                selectedSlot = this.getAttribute('data-slot');
+                console.log('Selected Slot:', selectedSlot);
             });
            
         });
@@ -83,13 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const isToday = currentDay.toDateString() === today.toDateString();
             const formattedDate = `${String(dayNum).padStart(2, '0')}-${String(currentDay.getMonth() + 1).padStart(2, '0')}-${currentDay.getFullYear().toString().slice(-2)}`;
             weekDays.innerHTML += `
-                 <div class="text-center">
-                    <button class="date-btn border-[2px] w-[70px] h-[70px]  rounded-[50%] text-center ${isToday ? 'bg-orange-500' : 'bg-orange-100'} font-[700] text-[24px] pt-[0px] hover:bg-orange-500">
-                             <h5>${dayNum}</h5>
-                         <input type="hidden" value="${formattedDate}" />
-                    </button>
+                <button class="date-btn">
+                    <div class="w-[70px] h-[70px] rounded-[50%] text-center ${isToday ? 'bg-orange-500' : 'bg-orange-100'} font-[700] text-[24px] pt-[14px] hover:bg-orange-500">
+                        <h5>${dayNum}</h5>
+                    </div>
+                    <input type="hidden" value="${formattedDate}" />
                     <span class="text-gray-600 font-[500]">${dayName}</span>
-                 </div>
+                </button>
             `;
         }
 
@@ -99,10 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const dateButtons = document.querySelectorAll('.date-btn');
         dateButtons.forEach(button => {
             button.addEventListener('click', function () {
-                 dateButtons.forEach(btn => btn.classList.remove('border-orange-500'));
-                 this.classList.add('border-orange-500');
-                 selectedDate = button.querySelector('input').value;
-                 console.log('Selected Date:', selectedDate);
+                selectedDate = button.querySelector('input').value;
+                console.log('Selected Date:', selectedDate);
             });
         });
     }
@@ -133,18 +128,37 @@ document.addEventListener('DOMContentLoaded', function () {
     var continueBtn = document.getElementById("continue-btn")
     continueBtn.addEventListener('click', function () {
         if (selectedDate && selectedSlot && selectedServices.length > 0) {
-          
-            const updatedServices = selectedServices.map(service => ({
-                ...service,
-                  selectedDate,
-                  selectedSlot,
-
-            }));
+            const payload = {
+                date: selectedDate,
+                slot: selectedSlot,
+                services: selectedServices
+            };
             
-         localStorage.setItem('selectedServices', JSON.stringify(updatedServices));
-             window.location.href = '/checkout';
-         } else {
-            alert('Please select both a date, slot, and at least one service.');
+             fetch('/api/book-service', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.redirected) {
+                     window.location.href = response.url;  
+                } else {
+                    return response.json();  
+                }
+            })
+                .then(data => {
+                    if (data.success) {
+                        localStorage.removeItem('selectedServices');
+                        window.location.href = '/checkout';
+                    } else {
+                        console.error('Booking failed:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error booking appointment:', error));
+        } else {
+            console.log('Please select both a date, slot, and at least one service.');
         }
     });
 });

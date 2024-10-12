@@ -32,23 +32,33 @@ export const slotApi = async (req, res) => {
     }
 }
 
-export const disCheckout = async(req, res) => {
+export const disCheckout = async (req,res) =>{
+ 
     try{
-        const userId = req.session.user
-        const [serviceData] = await connect.execute(`
-            SELECT s.*, sc.*,bs.*, p.name as staff_name 
-            FROM service s
-            JOIN book_service bs ON s.service_id = bs.id
-            JOIN sub_category sc ON s.sub_id = sc.id
-            JOIN professionals p ON s.staff_id = p.id
-            WHERE s.user_id = ?
-        `, [userId.id]);
-        
-        res.render('checkout',{serviceData})
+        res.render('checkout')
     }catch(e){
         console.log(e)
     }
- }
+}
+
+// export const disCheckout = async(req, res) => {
+//     try{
+//         const userId = req.session.user;
+//         const userAddress = await connect.execute("SELECT * FROM user_address WHERE ")
+//         const [serviceData] = await connect.execute(`
+//             SELECT s.*, sc.*,bs.*, p.name as staff_name 
+//             FROM service s
+//             JOIN book_service bs ON s.service_id = bs.id
+//             JOIN sub_category sc ON s.sub_id = sc.id
+//             JOIN professionals p ON s.staff_id = p.id
+//             WHERE s.user_id = ?
+//         `, [userId.id]);
+        
+//         res.render('checkout',{serviceData})
+//     }catch(e){
+//         console.log(e)
+//     }
+//  }
 
 export const bookService = async (req, res) => {
  
@@ -60,7 +70,7 @@ export const bookService = async (req, res) => {
 
     try {
         const userId = req.session.user;
-        const bookingData = req.session.bookingData || req.body;
+        const bookingData =  req.body;
         const { date, slot, services } = bookingData;
         if (!date || !slot || !services) {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
@@ -80,11 +90,9 @@ export const bookService = async (req, res) => {
         });
 
         await Promise.all(serviceInsertPromises);
-
         delete req.session.bookingData;
-
         // Respond with success
-        res.redirect('/checkout');
+        res.json({ success: true });
 
     } catch (error) {
         console.error('Error booking service:', error);
@@ -92,3 +100,15 @@ export const bookService = async (req, res) => {
     }
 };
 
+export const addAddress = async (req,res) =>{
+    try{
+    const userId = req.session.user    
+    const {f_name,mobile,email,address,message} = req.body;
+    await connect.execute("INSERT INTO user_address (user_id,f_name,mobile,email,address,message,status,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",[userId.id,f_name,mobile,email,address,message,'0']);
+    res.redirect('/checkout')
+
+    }catch(e){
+        console.log(e)
+    }
+}
+ 
