@@ -179,7 +179,7 @@ export const userLogin = async (req,res) =>{
     }
 }
 
-export const requesOtp = async (req,res) =>{
+export const requesOtp = async(req,res) =>{
     try{
         const { email } = req.body;
 

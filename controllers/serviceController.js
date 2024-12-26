@@ -1,7 +1,6 @@
 import { connect } from "../connection/conn.js";
 import { getAllCategory } from "../services/categoryService.js"
 import { getAllProfessionals } from "../services/professionalService.js";
-import { getAllSlot } from "../services/slotService.js";
 import { getAllSubCategory } from "../services/subCategoryService.js";
 
 export const getCategory = async (req, res) => {
@@ -24,8 +23,15 @@ export const getStaff = async (req, res) => {
 }
 
 export const slotApi = async (req, res) => {
+    const selectedDate = req.query.date
     try {
-        const slots = await getAllSlot()
+        const [slots] =  await connect.execute(
+            `SELECT ts.*
+             FROM time_slot ts
+             LEFT JOIN book_service bs ON ts.slot = bs.service_time AND bs.service_date = ?
+             WHERE bs.service_date IS NULL 
+            `,[selectedDate]
+        )
         res.json({ slots })
     } catch (e) {
         console.log(e)
@@ -35,7 +41,7 @@ export const slotApi = async (req, res) => {
 export const disCheckout = async (req,res) =>{
  
     try{
-        res.render('checkout')
+        res.render('checkout');
     }catch(e){
         console.log(e)
     }
@@ -62,11 +68,11 @@ export const disCheckout = async (req,res) =>{
 
 export const bookService = async (req, res) => {
  
-    if (!req.session.user) {
-        req.session.returnTo = '/checkout';
-        req.session.bookingData = req.body;
-        return res.redirect('/login');
-    }
+    // if (!req.session.user) {
+    //     req.session.returnTo = '/checkout';
+    //     req.session.bookingData = req.body;
+    //     return res.redirect('/login');
+    // }
 
     try {
         const userId = req.session.user;

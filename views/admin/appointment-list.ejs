@@ -1,0 +1,99 @@
+<html lang="en">
+
+</html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adisco | Appointment List </title>
+    <%- include('includes/head') %>
+</head>
+
+<body>
+    <div>
+        <div class="flex">
+            <%- include('includes/side-bar') %>
+
+                <div class="pages">
+                    <div>
+                        <%- include('includes/header') %>
+                    </div>
+                    <!-- Page Content -->
+                    <div class="p-5 mt-5">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-2xl font-[500]">Category List</h3>
+
+                            </div>
+                            <div class="mt-8">
+                                <div>
+                                    <ul class="flex gap-4">
+                                        <li class="w-[33.3%]">
+                                            <div>
+                                                <select name="" id="" class="p-3 border-[1px] rounded-[20px] w-[100%]">
+                                                    <option value="">Adisco</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li class="w-[33.3%]">
+                                            <div>
+                                                <select name="" id=""
+                                                    class="p-3 border-[1px] rounded-[20px]  w-[100%] ">
+                                                    <option value="">Adisco</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li class="w-[33.3%]">
+                                            <div>
+                                                <select name="by_day" id=""
+                                                    class="p-3 border-[1px] rounded-[20px]   w-[100%]">
+                                                    <option value="day">Day</option>
+                                                    <option value="3days">3 Days</option>
+                                                    <option value="week">Week</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mt-4">
+                                    <div>
+                                        <table class="w-[100%]">
+                                            <colgroup>
+                                                <col>
+                                            </colgroup>
+                                            <thead role="presentation">
+                                                <tr role="row">
+                                                    <th aria-hidden="true" class="fc-timegrid-axis">
+                                                        <div class="fc-timegrid-axis-frame"></div>
+                                                    </th>
+                                                    <% proData.forEach((data)=>{%>
+                                                        <th>
+                                                            <div>
+                                                                <button
+                                                                    class="h-[70px] w-[70px] border-[2px] rounded-[50%] font-[700] text-[24px] hover:border-orange-500">
+                                                                    <%= data.name.substr(0,1) %>
+                                                                </button>
+                                                                <p class="font-[600]">
+                                                                    <%= data.name %>
+                                                                </p>
+                                                            </div>
+                                                        </th>
+                                                        <% }) %>
+                                                </tr>
+                                            </thead>
+                                         </table>
+                                          
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+        <%- include('includes/foot') %>
+
+</body>
+
+</html>

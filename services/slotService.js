@@ -5,6 +5,7 @@ export const getAllSlot = async () =>{
      const [slotData] = await connect.execute("SELECT * FROM time_slot")
      return slotData
     }catch(e){
-        console.log(e)
+        console.log(e);
     }
 }
+

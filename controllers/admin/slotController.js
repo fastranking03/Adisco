@@ -4,7 +4,7 @@ import { getAllSlot } from "../../services/slotService.js"
 export const disSlot = async (req,res) =>{
     try{
      const slotData = await getAllSlot()
-     res.render('admin/slot-list',{slotData})
+     res.render('admin/slot-list',{slotData});
     }catch(e){
         console.log(e)
     }
@@ -50,3 +50,5 @@ export const deleteSlot = async(req,res) =>{
         console.log(e)
     }
 }
+
+ 

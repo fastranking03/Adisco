@@ -1,14 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     let selectedSlot = null;
     let selectedDate = null;
-
-    fetch('/api/get-slots')
+    
+    function fetchSlots(date){
+        fetch(`/api/get-slots?date=${date}`)
         .then(response => response.json())
         .then(data => {
             slotdata = data.slots;
             renderSlots(slotdata);
         })
         .catch(error => console.error('Error fetching slots:', error));
+    }
+
+    fetchSlots()
 
     function renderSlots(slots) {
         const slotGrid = document.getElementById("slotGrid");
@@ -103,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
                  this.classList.add('border-orange-500');
                  selectedDate = button.querySelector('input').value;
                  console.log('Selected Date:', selectedDate);
+                 fetchSlots(selectedDate);
             });
         });
     }
